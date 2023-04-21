@@ -1,0 +1,19 @@
+#cloud-config
+package_upgrade: true
+packages:
+  # - nodejs
+  # - npm
+runcmd:
+  # install Node.js
+  - 'curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -'
+  - 'sudo apt-get install -y nodejs'
+  - 'sudo npm install -g pm2'
+  - curl -o server.js https://raw.githubusercontent.com/cpinotossi/cptdagw/master/server.js
+  - chmod +x server.js
+  - mkdir openssl
+  - curl -o openssl/srv.key https://raw.githubusercontent.com/cpinotossi/cptdagw/master/openssl/srv.key
+  - curl -o openssl/srv.crt https://raw.githubusercontent.com/cpinotossi/cptdagw/master/openssl/srv.crt
+  - curl -o openssl/ca.crt https://raw.githubusercontent.com/cpinotossi/cptdagw/master/openssl/ca.crt
+  - curl -o openssl/alice.crt https://raw.githubusercontent.com/cpinotossi/cptdagw/master/openssl/alice.crt
+  - curl -o openssl/alice.key https://raw.githubusercontent.com/cpinotossi/cptdagw/master/openssl/alice.key
+  - pm2 start server.js
